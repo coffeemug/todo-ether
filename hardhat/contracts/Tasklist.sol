@@ -60,6 +60,10 @@ contract Tasklist {
       submission.owner.transfer(task.bounty);
     }
 
+    function getTasksCount() external view returns(uint) {
+      return n_tasks;
+    }
+
     function getSubmission(uint task_idx, uint submission_idx) external view returns(Submission memory) {
       require(task_idx < n_tasks, "Task does not exist");
 
