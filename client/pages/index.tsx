@@ -1,7 +1,6 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import styles from '../styles/Home.module.css';
 import { useAccount } from 'wagmi';
 import { TodoIndex } from '../components/TodoIndex';
 
@@ -9,7 +8,7 @@ const Home: NextPage = () => {
   const { isConnected } = useAccount();
 
   return (
-    <div className={styles.container}>
+    <div className='flex h-screen'>
       <Head>
         <title>Example TODO dApp</title>
         <meta
@@ -17,17 +16,22 @@ const Home: NextPage = () => {
           content="An example TODO dApp built on Ethereum"
         />
         <link rel="icon" href="/favicon.ico" />
+        <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
       </Head>
 
-      <main className={styles.main}>
+      <main className='flex flex-col grow'>
 
-        <h1 className={styles.title}>
+        <h1 className='text-center text-3xl mt-6 font-bold text-gray-700'>
           Welcome to TODO dApp!
         </h1>
 
-        <ConnectButton />
+        <div className='flex justify-center pt-6'>
+          <ConnectButton />
+        </div>
 
-        {isConnected && <TodoIndex />}
+        <div className='flex grow items-center justify-center'>
+          {isConnected && <TodoIndex />}
+        </div>
 
       </main>
     </div>
