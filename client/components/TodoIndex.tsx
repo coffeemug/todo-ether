@@ -1,12 +1,9 @@
 import { useContractRead } from 'wagmi'
-import TasklistContract from '../../hardhat/artifacts/contracts/Tasklist.sol/Tasklist.json';
-import { Interface } from "ethers/lib/utils"
 import { BigNumber } from 'ethers';
 import { AddTask } from './AddTask'
 import { useState } from 'react';
+import { address, TasklistContract } from '../lib/shared';
 
-const address = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
-const abi = new Interface(TasklistContract.abi);
 
 export const TodoIndex = () => {
   const [showAddTask, setShowAddTask] = useState(false);

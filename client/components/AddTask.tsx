@@ -1,6 +1,10 @@
-import { Fragment, useRef, useState } from 'react'
+import { FormEventHandler, Fragment, useRef } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { CheckCircleIcon } from '@heroicons/react/outline'
+import { address, abi } from '../lib/shared';
+import { ethers } from 'ethers';
+import { useSigner } from 'wagmi';
+
 
 type AddTaskProps = {
   open: boolean,
@@ -8,7 +12,24 @@ type AddTaskProps = {
 }
 
 export const AddTask = ({ open, setOpen }: AddTaskProps) => {
-  const cancelButtonRef = useRef(null)
+  const { data: signer, status } = useSigner();
+  const cancelButtonRef = useRef(null);
+
+  const onSubmit: FormEventHandler = async (event) => {
+    event.preventDefault();
+    setOpen(false);
+    const target = event.target as any;
+    const data = {
+      name: target.name.value as string,
+      bounty: target.bounty.value as string,
+      description: target.description.value as string,
+    }
+
+    const contract = new ethers.Contract(address, abi, signer!);
+    await contract.submitTask(data.name, data.description, {
+      value: ethers.utils.parseUnits(data.bounty, 'wei'),
+    });
+  }
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -37,50 +58,51 @@ export const AddTask = ({ open, setOpen }: AddTaskProps) => {
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
               <Dialog.Panel className="relative bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-lg sm:w-full">
-                <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                  <div className="sm:flex sm:items-start">
-                    <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-blue-100 sm:mx-0 sm:h-10 sm:w-10">
-                      <CheckCircleIcon className="h-6 w-6 text-blue-600" aria-hidden="true" />
-                    </div>
-                    <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                      <Dialog.Title as="h3" className="text-lg leading-6 font-medium text-gray-900">
-                        New task
-                      </Dialog.Title>
-                      <div className="mt-2">
-                        <p className="text-sm text-gray-500">
-                          Create a new task. Anyone can submit a claim, and you choose which claim gets the bounty.
-                        </p>
-                        <form className='mt-4 flex flex-col' action="#">
-                          <label className="text-sm mb-1" htmlFor="name">Task name:</label>
-                          <input className='border rounded px-1' type="text" id="name" name="name" />
+                <form onSubmit={onSubmit}>
+                  <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div className="sm:flex sm:items-start">
+                      <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-blue-100 sm:mx-0 sm:h-10 sm:w-10">
+                        <CheckCircleIcon className="h-6 w-6 text-blue-600" aria-hidden="true" />
+                      </div>
+                      <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                        <Dialog.Title as="h3" className="text-lg leading-6 font-medium text-gray-900">
+                          New task
+                        </Dialog.Title>
+                        <div className="mt-2">
+                          <p className="text-sm text-gray-500">
+                            Create a new task. Anyone can submit a claim, and you choose which claim gets the bounty.
+                          </p>
+                          <div className='mt-4 flex flex-col'>
+                            <label className="text-sm mb-1" htmlFor="name">Task name:</label>
+                            <input className='border rounded px-1 text-sm py-1' type="text" id="name" name="name" required />
 
-                          <label className="text-sm mt-3 mb-1" htmlFor="bounty">Bounty (in wei):</label>
-                          <input className='border rounded px-1' type="text" id="bounty" name="bounty" />
+                            <label className="text-sm mt-3 mb-1" htmlFor="bounty">Bounty (in wei):</label>
+                            <input className='border rounded px-1 text-sm py-2 scroll-none' type="number" id="bounty" name="bounty" required />
 
-                          <label className="text-sm mt-3 mb-1" htmlFor="description">Description:</label>
-                          <textarea className='border rounded px-1 resize-none' rows={3} id="description" name="description" />
-                        </form>
+                            <label className="text-sm mt-3 mb-1" htmlFor="description">Description:</label>
+                            <textarea className='border rounded px-1  text-sm py-1 resize-none' rows={3} id="description" name="description" required />
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                  <button
-                    type="button"
-                    className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm"
-                    onClick={() => setOpen(false)}
-                  >
-                    Create task
-                  </button>
-                  <button
-                    type="button"
-                    className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-                    onClick={() => setOpen(false)}
-                    ref={cancelButtonRef}
-                  >
-                    Cancel
-                  </button>
-                </div>
+                  <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <button
+                      type="submit"
+                      className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm"
+                    >
+                      Create task
+                    </button>
+                    <button
+                      type="button"
+                      className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                      onClick={() => setOpen(false)}
+                      ref={cancelButtonRef}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </form>
               </Dialog.Panel>
             </Transition.Child>
           </div>
