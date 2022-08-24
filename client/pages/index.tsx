@@ -16,7 +16,6 @@ const Home: NextPage = () => {
           content="An example TODO dApp built on Ethereum"
         />
         <link rel="icon" href="/favicon.ico" />
-        <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
       </Head>
 
       <main className='flex flex-col grow'>

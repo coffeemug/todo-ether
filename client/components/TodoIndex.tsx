@@ -3,14 +3,14 @@ import { BigNumber } from 'ethers';
 import { AddTask } from './AddTask'
 import { useState } from 'react';
 import { address, TasklistContract } from '../lib/shared';
-
+import { TodoList } from './TodoList';
 
 export const TodoIndex = () => {
   const [showAddTask, setShowAddTask] = useState(false);
   const { isLoading, isError, data } = useContractRead({
     addressOrName: address,
     contractInterface: TasklistContract.abi,
-    functionName: 'getTasksCount',
+    functionName: 'n_tasks',
     args: [],
     staleTime: 100,
   });
@@ -34,6 +34,6 @@ export const TodoIndex = () => {
       </div>
     )
   } else {
-    return <p>Loaded</p>
+    return <TodoList nTasks={taskCount} />
   }
 }

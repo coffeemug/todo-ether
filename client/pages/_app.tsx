@@ -6,6 +6,11 @@ import { chain, configureChains, createClient, WagmiConfig } from 'wagmi';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
 
+chain.hardhat.multicall = {
+  address: '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0',
+  blockCreated: 3,
+};
+
 const { chains, provider, webSocketProvider } = configureChains(
   [
     chain.hardhat,
