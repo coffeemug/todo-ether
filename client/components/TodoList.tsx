@@ -5,6 +5,7 @@ import { TasklistContract, address } from "../lib/shared";
 import { Loading } from './Loading';
 import { AddTask } from './AddTask'
 import { AddJob } from './AddJob';
+import pluralize from 'pluralize';
 
 type TodoListProps = {
   nTasks: number,
@@ -29,6 +30,7 @@ export const TodoList = ({ nTasks }: TodoListProps) => {
 
   const { isLoading, isError, data, error } = useContractReads({
     contracts,
+    watch: true,
   });
 
   if (isError) {
@@ -62,7 +64,7 @@ export const TodoList = ({ nTasks }: TodoListProps) => {
                 {task.name}
                 {task.n_submissions.gt(0) && <>
                   <br />
-                  <a href="#" className="text-xs text-blue-400">{task.n_submissions.toNumber()} submissions</a>
+                  <a href="#" className="text-xs text-blue-400">{pluralize("submission", task.n_submissions.toNumber(), true)}</a>
                 </>}
                 <br />
                 <a href="#" onClick={() => onAddJob(idx)} className="text-xs text-blue-400">submit job</a>
