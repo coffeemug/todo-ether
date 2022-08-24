@@ -34,16 +34,20 @@ export const TodoList = ({ nTasks }: TodoListProps) => {
   return (
     <div className="flex flex-col mt-12 items-center">
       <table className="shadow-lg table-fixed w-3/5">
-        <tr>
-          <th className="border text-left py-1 px-2">Task name</th>
-          <th className="border text-left py-1 px-2">Description</th>
-          <th className="border text-left py-1 px-2">Bounty</th>
-        </tr>
-        {data!.map(task => <tr>
-            <td className="border py-1 px-2">{task.name}</td>
-            <td className="border py-1 px-2">{task.description}</td>
-            <td className="border py-1 px-2">{task.bounty.toNumber()}</td>
-          </tr>)}
+        <thead>
+          <tr>
+            <th className="border text-left py-1 px-2">Task name</th>
+            <th className="border text-left py-1 px-2">Description</th>
+            <th className="border text-left py-1 px-2">Bounty</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data!.map((task, idx) => <tr key={idx}>
+              <td className="border py-1 px-2">{task.name}</td>
+              <td className="border py-1 px-2">{task.description}</td>
+              <td className="border py-1 px-2">{task.bounty.toNumber()}</td>
+            </tr>)}
+        </tbody>
       </table>
 
       <div className="w-3/5 justify-end flex mt-4">

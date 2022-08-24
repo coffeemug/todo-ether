@@ -15,7 +15,7 @@ const deployMulticall = async () => {
 }
 
 async function main() {
-  //await deployTasklist();
+  await deployTasklist();
   await deployMulticall();
 }
 

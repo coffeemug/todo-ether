@@ -8,7 +8,7 @@ import { Loading } from './Loading';
 
 export const TodoIndex = () => {
   const [showAddTask, setShowAddTask] = useState(false);
-  const { isLoading, isError, data } = useContractRead({
+  const { isLoading, isError, data, error } = useContractRead({
     addressOrName: address,
     contractInterface: TasklistContract.abi,
     functionName: 'n_tasks',
@@ -17,6 +17,7 @@ export const TodoIndex = () => {
   });
 
   if (isError) {
+    console.error(error);
     return <p>Something went wrong</p>;
   } else if (isLoading) {
     return <Loading />;
