@@ -13,7 +13,7 @@ export const TodoIndex = () => {
     contractInterface: TasklistContract.abi,
     functionName: 'n_tasks',
     args: [],
-    staleTime: 100,
+    watch: true,
   });
 
   if (isError) {
@@ -26,7 +26,7 @@ export const TodoIndex = () => {
 
   if (taskCount === 0) {
     return (
-      <div>
+      <div className='flex grow items-center justify-center'>
         <h2 className="-mt-24 text-gray-500 text-xl">No tasks yet. <a href="#" onClick={() => setShowAddTask(true)} className='text-blue-500'>Create one</a>!</h2>
         <AddTask
           open={showAddTask}

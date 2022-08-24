@@ -28,7 +28,7 @@ const Home: NextPage = () => {
           <ConnectButton />
         </div>
 
-        <div className='flex grow items-center justify-center'>
+        <div className='flex grow justify-center'>
           {isConnected && <TodoIndex />}
         </div>
 
