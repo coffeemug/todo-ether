@@ -8,14 +8,14 @@ const deployTasklist = async () => {
 }
 
 const deployMulticall = async () => {
-  const Multicall = await ethers.getContractFactory("Multicall");
+  const Multicall = await ethers.getContractFactory("Multicall3");
   const multicall = await Multicall.deploy();
   await multicall.deployed();
   console.log(`Multicall deployed to ${multicall.address} on block ${await ethers.provider.getBlockNumber()}`);
 }
 
 async function main() {
-  await deployTasklist();
+  //await deployTasklist();
   await deployMulticall();
 }
 

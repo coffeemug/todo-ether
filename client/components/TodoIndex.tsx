@@ -4,6 +4,7 @@ import { AddTask } from './AddTask'
 import { useState } from 'react';
 import { address, TasklistContract } from '../lib/shared';
 import { TodoList } from './TodoList';
+import { Loading } from './Loading';
 
 export const TodoIndex = () => {
   const [showAddTask, setShowAddTask] = useState(false);
@@ -18,7 +19,7 @@ export const TodoIndex = () => {
   if (isError) {
     return <p>Something went wrong</p>;
   } else if (isLoading) {
-    return <p className="-mt-24 text-gray-500 text-xl">Loading...</p>;
+    return <Loading />;
   }
 
   const taskCount = (data as unknown as BigNumber).toNumber();
@@ -34,6 +35,10 @@ export const TodoIndex = () => {
       </div>
     )
   } else {
-    return <TodoList nTasks={taskCount} />
+    return (
+      <div>
+        <TodoList nTasks={taskCount} />
+      </div>
+    )
   }
 }
