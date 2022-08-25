@@ -49,7 +49,10 @@ export const TodoList = ({ nTasks }: TodoListProps) => {
   }
 
   return (
-    <div className="flex flex-col mt-12 items-center">
+    <div className="flex flex-col mt-8 items-center">
+      <div className="w-3/5 justify-start">
+        <p className="mb-5 text-2xl">Submitted tasks</p>
+      </div>
       <table className="shadow-lg table-fixed w-3/5">
         <thead>
           <tr>
