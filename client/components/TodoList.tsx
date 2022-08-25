@@ -6,6 +6,7 @@ import { Loading } from './Loading';
 import { AddTask } from './AddTask'
 import { AddJob } from './AddJob';
 import pluralize from 'pluralize';
+import Link from 'next/link';
 
 type TodoListProps = {
   nTasks: number,
@@ -64,7 +65,14 @@ export const TodoList = ({ nTasks }: TodoListProps) => {
                 {task.name}
                 {task.n_submissions.gt(0) && <>
                   <br />
-                  <a href="#" className="text-xs text-blue-400">{pluralize("submission", task.n_submissions.toNumber(), true)}</a>
+                  <span className="text-xs text-blue-400"><Link href={{
+                    pathname: "/submissionList",
+                    query: {
+                      taskIdx: idx,
+                      taskName: task.name,
+                      nSubmissions: task.n_submissions.toNumber(),
+                    }
+                  }}>{pluralize("submission", task.n_submissions.toNumber(), true)}</Link></span>
                 </>}
                 <br />
                 <a href="#" onClick={() => onAddJob(idx)} className="text-xs text-blue-400">submit job</a>

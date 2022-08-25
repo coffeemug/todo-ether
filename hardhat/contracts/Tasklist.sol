@@ -17,6 +17,7 @@ contract Tasklist {
       address owner;
       uint bounty;
       uint n_submissions;
+      bool closed;
       mapping (uint => Submission) submissions;
     }
 
@@ -34,6 +35,7 @@ contract Tasklist {
       task.owner = msg.sender;
       task.bounty = msg.value;
       task.n_submissions = 0;
+      task.closed = false;
     }
 
     function submitJob(string calldata description, uint task_idx) external {
@@ -56,6 +58,8 @@ contract Tasklist {
 
       Submission storage submission = task.submissions[submission_idx];
       submission.approved = true;
+
+      tasks[task_idx].closed = true;
 
       submission.owner.transfer(task.bounty);
     }
