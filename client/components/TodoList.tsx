@@ -65,7 +65,7 @@ export const TodoList = ({ nTasks }: TodoListProps) => {
         <tbody>
           {data!.map((task, idx) => <tr key={idx}>
               <td className="border py-1 px-2">
-                {task.name}
+                <span className={task.closed ? "line-through" : ""}>{task.name}</span>
                 {task.n_submissions.gt(0) && <>
                   <br />
                   <span className="text-xs text-blue-400"><Link href={{
@@ -74,11 +74,13 @@ export const TodoList = ({ nTasks }: TodoListProps) => {
                       taskIdx: idx,
                       taskName: task.name,
                       nSubmissions: task.n_submissions.toNumber(),
+                      taskOwner: task.owner,
                     }
                   }}>{pluralize("submission", task.n_submissions.toNumber(), true)}</Link></span>
                 </>}
                 <br />
-                <a href="#" onClick={() => onAddJob(idx)} className="text-xs text-blue-400">submit job</a>
+                {!task.closed &&
+                  <a href="#" onClick={() => onAddJob(idx)} className="text-xs text-blue-400">submit job</a>}
               </td>
               <td className="border py-1 px-2">{task.description}</td>
               <td className="border py-1 px-2">{task.bounty.toNumber()}</td>
